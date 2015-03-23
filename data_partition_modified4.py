@@ -229,7 +229,7 @@ try:
             else:
                 p=p
     
-    figure_filename2=files_in_folder[u].replace('setpoint','segmentlist')
+    figure_filename2=files_in_folder[u].replace('setpoint','segmentset')
     complete_path_to_save_segmentationlist=os.path.normpath(os.path.join(complete_dirpath_to_save_segmentlist,figure_filename2))
     write_array_to_csv(complete_path_to_save_segmentationlist,intva)
 
