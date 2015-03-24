@@ -115,7 +115,7 @@ def adjusted_length(step_steplabel_file_path):
 #######################################   INITIALIZING        ###########################################
 #########################################################################################################
 
-#intialize "sensor variable of interest","folder to accesss", and "folder to save output to"
+
 sensor_variables=['Heater.temp']#-------------------------------------"sensor variable of interest"
 setpoint_folder='D://Heater//setpoint'
 current_folder='D://Heater//setpoint'
