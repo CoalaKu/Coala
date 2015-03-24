@@ -95,20 +95,27 @@ def extract_serial_number(filename):
 
 def adjusted_length(step_steplabel_file_path):
 #    import numpy as np    
-    mm=get_variable_from_csv(step_steplabel_file_path, ['Step'])
-    
-    nonzero_step=np.zeros((1,1))
-    if min(mm)==0:
-        zero_step=np.count_nonzero(mm==0)
-        if zero_step==len(mm):
-            zero_step=0
-    else:
-        nonzero_step=np.count_nonzero(mm==min(mm))
-        for i in range(len(mm)):
-            if mm[i]==min(mm):
-                zero_step=(i+1)-nonzero_step
+    xxx=get_variable_from_csv_alternative(single_file_path, 'StepLabel')
+    mmm=np.zeros((np.shape(xxx)[0],1))
+    mmmm=np.zeros((np.shape(xxx)[0],1))
+        
+    for i in range(len(mmm)):
+        mmm[i]=xxx[i].split(".")[0]
+        try:
+            mmmm[i]=xxx[i].split(".")[1]
+        except:
+            mmmm[i]=0
+        
+    zero_step=0
+    for i in range(len(mmm)-1):
+        if mmm[i]>mmm[i+1]:
+            zero_step=(i+1)
+            break
+        elif mmm[i]==mmm[i+1] and mmmm[i]>mmmm[i+1]:
+            zero_step=(i+1)
+            break
                 
-    return((len(mm)-int(zero_step)))
+    return((len(xxx)-int(zero_step))), mmm
     
 #########################################################################################################
 #######################################   INITIALIZING        ###########################################
@@ -139,29 +146,18 @@ for w in range(len(files_in_folder)):
 u=serial_number_list.index(serial_number)  
 single_file_path=os.path.join(setpoint_folder, files_in_folder[u])
     
-try:
-    xxx=get_variable_from_csv_alternative(single_file_path, 'StepLabel')
-    
-    mmm=np.zeros((np.shape(xxx)[0],1))
-        
-    for i in range(len(mmm)):
-        mmm[i]=xxx[i].split(".")[0] 
-
+try:    
     AA=get_variable_from_csv(single_file_path, sensor_variables)
         
-    modified_length=adjusted_length(single_file_path)   
-        
-    A=np.zeros((modified_length,1))
-    m=np.zeros((modified_length,1))
-
-    
+    modified_length=adjusted_length(single_file_path)[0]   
+   
     A=AA[-modified_length:]
-    m=mmm[-modified_length:]
-
+    m=adjusted_length(single_file_path)[1][-modified_length:]
+    
     A_difference = np.zeros(((modified_length-1),1))
     for i in range(0,(modified_length-1)):
         A_difference[i] = A[i+1] - A[i]
-        
+      
     uu,uuu=np.unique(m,return_counts=True)
     k=len(uuu)
         
