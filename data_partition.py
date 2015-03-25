@@ -19,7 +19,7 @@ import time
 import csv
 import numpy as np
 import re
-
+import math
 #########################################################################################################
 #######################################   FUNCTIONS           ###########################################
 #########################################################################################################
@@ -109,7 +109,7 @@ def adjusted_length(step_steplabel_file_path):
             zero_step=(i+1)
             break
                 
-    return((len(xxx)-int(zero_step))), mmm
+    return ((len(xxx)-int(zero_step))), mmm
     
 #########################################################################################################
 #######################################   INITIALIZING        ###########################################
@@ -143,15 +143,20 @@ single_file_path=os.path.join(setpoint_folder, files_in_folder[u])
 try:    
     AA=get_variable_from_csv(single_file_path, sensor_variables)
         
-    modified_length=adjusted_length(single_file_path)[0]   
+    modified_length, mmm=adjusted_length(single_file_path)  
    
     A=AA[-modified_length:]
-    m=adjusted_length(single_file_path)[1][-modified_length:]
+    m=mmm[-modified_length:]
     
     A_difference = np.zeros(((modified_length-1),1))
     for i in range(0,(modified_length-1)):
-        A_difference[i] = A[i+1] - A[i]
-      
+        A_difference[i] = A[i+1] - A[i]           
+    
+    if sensor_variables[0][0:6]!='Heater':
+        for k in range(len(A_difference)):
+            if math.fabs(A_difference[k]) <= 0.01:
+                m[k+1] = m[k] 
+        
     uu,uuu=np.unique(m,return_counts=True)
     k=len(uuu)
         
@@ -219,7 +224,7 @@ try:
             else:
                 p=p
     
-    figure_filename2=files_in_folder[u].replace('setpoint','segmentset')
+    figure_filename2=files_in_folder[u].replace('setpoint','segmentlist')
     complete_path_to_save_segmentationlist=os.path.normpath(os.path.join(complete_dirpath_to_save_segmentlist,figure_filename2))
     write_array_to_csv(complete_path_to_save_segmentationlist,intva)
 
