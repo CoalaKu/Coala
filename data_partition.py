@@ -152,10 +152,10 @@ try:
     for i in range(0,(modified_length-1)):
         A_difference[i] = A[i+1] - A[i]           
     
-#    if sensor_variables[0][0:6]!='Heater':
-#        for k in range(len(A_difference)):
-#            if math.fabs(A_difference[k]) <= 0.01:
-#                m[k+1] = m[k]
+    if sensor_variables[0][0:6]!='Heater':
+        for k in range(len(A_difference)):
+            if math.fabs(A_difference[k]) <= 0.01:
+                m[k+1] = m[k]
         
     uu,uuu=np.unique(m,return_counts=True)
     k=len(uuu)
