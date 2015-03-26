@@ -117,9 +117,9 @@ def adjusted_length(step_steplabel_file_path):
 
 
 sensor_variables=['Heater.temp']#-------------------------------------"sensor variable of interest"
-setpoint_folder='D://Heater//setpoint'
-current_folder='D://Heater//setpoint'
-output_folder='D://Heater//Output'
+setpoint_folder='D://HeaterTest//setpoint'
+current_folder='D://HeaterTest//setpoint'
+output_folder='D://HeaterTest//Output'
 serial_number=1679
 
 #########################################################################################################
@@ -213,13 +213,15 @@ try:
     
     rrr=len(intv)-np.count_nonzero(intv[:,1]==0)
     p=0
-    intva=np.zeros((rrr,3))
+    intva=np.zeros((rrr,5))
     for j in range(1,7):
         for i in range(1,r+1):
             if intv[i,1]==j:
                 intva[p,0]=j
                 intva[p,1]=intv[i-1,0]
                 intva[p,2]=intv[i,0]-1
+                intva[p,3]=intv[i,0]-intv[i-1,0]
+                intva[p,4]=np.mean(A[intva[p,1]:intva[p,2]+1])
                 p=p+1
             else:
                 p=p
